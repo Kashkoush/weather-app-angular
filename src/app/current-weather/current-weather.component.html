@@ -1,0 +1,33 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-xl-6 col-sm-12 offset-xl-3">
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+        <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+          <input type="text" nz-input placeholder="Enter City Name..." ngModel name="cityName" />
+        </nz-input-group>
+        <ng-template #suffixButton>
+          <button nz-button nzType="primary" nzSize="large" type="submit" nzSearch>Search</button>
+        </ng-template>
+      </form>
+
+      <p class="mt-4 mb-4">Showing Results for <b>{{selectedCityName | titlecase}}</b></p>
+
+      <nz-card nzTitle="Weather for today" [nzExtra]="extraTemplate" *ngIf="weatherNow">
+        <p>Updated {{ timeInterval }}</p>
+        <h4>Current Temparature: <span
+            style="color: green;">{{ currentTempratureInCelsius | number:'1.0-0' }}<span>&#8451;</span></span></h4>
+        <h5>Feels like: {{ convertKelvinToCelsius(weatherNow.main.feels_like) | number:'1.0-0' }}<span>&#8451;</span>
+        </h5>
+        <img [src]="weatherIconUrl" [alt]="weatherNow.weather[0].main" class="w-25">
+        <h4>{{ weatherNow.weather[0].main }}</h4>
+        <p>{{ weatherNow.weather[0].description }}</p>
+      </nz-card>
+      <ng-template #extraTemplate>
+        <button nz-button nzType="default" (click)="updateWeather()">Update</button>
+      </ng-template>
+      <nz-card nzTitle="Loading Weather Information...." *ngIf="!weatherNow">
+        <nz-skeleton [nzActive]="true" size='large'></nz-skeleton>
+      </nz-card>
+    </div>
+  </div>
+</div>
